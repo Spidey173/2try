@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicApp • {{ heading }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --card-bg: #181818;
+            --hover-bg: #282828;
+            --primary: #1DB954;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 80px;
+        }
+
+/* —— Premium Glass-Morphic Navbar —— */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  padding: 1rem 2rem;
+  backdrop-filter: blur(12px);
+  background: rgba(18, 18, 18, 0.6);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  transition: background 0.3s ease;
+}
+
+/* Darken slightly on scroll */
+.navbar.scrolled {
+  background: rgba(18, 18, 18, 0.85);
+}
+
+/* Brand styling */
+.navbar-brand {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.75rem;
+  color: var(--primary) !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+.navbar-brand:hover {
+  color: #fff !important;
+}
+
+/* Toggler button */
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+.navbar-toggler-icon {
+  position: relative;
+  width: 30px;
+  height: 2px;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 2px;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+.navbar-toggler-icon::before { top: -8px; }
+.navbar-toggler-icon::after { top: 8px; }
+.navbar-toggler.collapsed .navbar-toggler-icon {
+  background: transparent;
+}
+.navbar-toggler.collapsed .navbar-toggler-icon::before {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.navbar-toggler.collapsed .navbar-toggler-icon::after {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Nav links */
+.nav-link {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  position: relative;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text-primary) !important;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: 2px;
+  width: 0%;
+  background: var(--primary);
+  transition: all 0.3s ease;
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+  left: 0;
+  width: 100%;
+}
+
+/* Search bar tweaks */
+.search-bar {
+  max-width: 200px;
+  transition: background 0.3s ease;
+}
+.search-bar:focus {
+  background: rgba(255,255,255,0.2) !important;
+}
+
+/* Utility: add 'scrolled' class via JS on window.scroll */
+
+
+        .card {
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            background-color: var(--hover-bg);
+            transform: translateY(-5px);
+        }
+
+        .card-img-top {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            height: 160px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+        }
+
+        .now-playing {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #181818;
+            border-top: 1px solid #282828;
+            padding: 0.8rem;
+            z-index: 1000;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-play {
+            background-color: var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        .btn-play:hover {
+            transform: scale(1.05);
+            background-color: var(--primary);
+        }
+
+        .like-btn {
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 1.2rem;
+        }
+
+        .like-btn.liked {
+            color: var(--primary);
+        }
+
+                /* Add seek bar styling */
+        .seek-container {
+            padding: 0 15px;
+        }
+        .time-display {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">
+                MusicApp
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('library') }}">Your Library</a>
+                    </li>
+                </ul>
+
+                <form class="d-flex me-3" action="{{ url_for('home') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control search-bar" placeholder="Search songs...">
+                    </div>
+                </form>
+
+                <ul class="navbar-nav">
+                    {% if session.username %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i> {{ session.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('library') }}">Your Library</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('user_logout') }}">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('user_login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="section-title">{{ heading }}</h1>
+        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+            {% for song in songs %}
+            <div class="col">
+                <div class="card h-100" onclick="playSong({{ song[0] }})">
+                    {% if song[4] %}
+                        <img src="{{ url_for('static', filename='covers/' + song[4]) }}"
+                             class="card-img-top" alt="Album cover">
+                    {% else %}
+                        <img src="https://source.unsplash.com/random/300x300/?music,album&sig={{ song[0] }}"
+                             class="card-img-top" alt="Album cover">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ song[1] }}</h5>
+                        <p class="card-text">{{ song[2] }}</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <p class="text-center text-muted">No songs in this category</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Updated Now Playing Bar -->
+    <div class="now-playing">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3 d-flex align-items-center">
+                    <img id="nowPlayingImg" src="https://source.unsplash.com/random/60x60/?music"
+                         class="img-thumbnail me-2" alt="Now playing" style="width: 60px; height: 60px;">
+                    <div>
+                        <h6 id="nowPlayingTitle" class="mb-0 fs-6">Not Playing</h6>
+                        <small id="nowPlayingArtist" class="text-muted">Select a song</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="player-controls mb-2 justify-content-center">
+                        <button class="btn btn-link text-white" onclick="skipBackward()">
+                            <i class="bi bi-skip-backward-fill fs-5"></i>
+                        </button>
+                        <button id="playButton" class="btn-play mx-2" onclick="togglePlay()">
+                            <i class="bi bi-play-fill fs-5"></i>
+                        </button>
+                        <button class="btn btn-link text-white" onclick="skipForward()">
+                            <i class="bi bi-skip-forward-fill fs-5"></i>
+                        </button>
+                    </div>
+                    <div class="seek-container">
+                        <input type="range" id="seekBar" class="form-range" min="0" max="100" value="0" step="0.1">
+                        <div class="d-flex justify-content-between time-display">
+                            <span id="currentTime">0:00</span>
+                            <span id="duration">0:00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex justify-content-end align-items-center">
+                    <button id="likeButton" class="like-btn me-3" onclick="toggleLike()">
+                        <i class="bi bi-heart fs-5"></i>
+                    </button>
+                    <div class="volume-control d-flex align-items-center">
+                        <i class="bi bi-volume-up me-2"></i>
+                        <input type="range" id="volumeControl" class="form-range" min="0" max="1" step="0.01" value="0.7">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='player.js') }}"></script>
+</body>
+</html>
